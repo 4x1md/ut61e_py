@@ -26,19 +26,8 @@ RAW_DATA_LENGTH = 14
 READ_RETRIES = 3
 
 # UT61E protocol constants
-# Digits encoding
-DIGITS = {
-    0b0110000: 0,
-    0b0110001: 1,
-    0b0110010: 2,
-    0b0110011: 3,
-    0b0110100: 4,
-    0b0110101: 5,
-    0b0110110: 6,
-    0b0110111: 7,
-    0b0111000: 8,
-    0b0111001: 9,
-}
+# Significant bits in digit bytes
+DIGIT_MASK = 0b00001111
 # Bytes containing digits
 DIGIT_BYTES = (1, 2, 3, 4, 5)
 
@@ -390,7 +379,7 @@ class UT61E(object):
         # Value
         val = 0
         for n in DIGIT_BYTES:
-            digit = DIGITS[raw_data[n]]
+            digit = raw_data[n] & DIGIT_MASK
             val = val * 10 + digit
         val *= multiplier
         val = -val if minus else val
