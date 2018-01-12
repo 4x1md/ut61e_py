@@ -10,7 +10,6 @@ Created on Sep 22, 2017
        human readable form.
 """
 
-from __future__ import print_function
 import serial
 
 # Settings constants
