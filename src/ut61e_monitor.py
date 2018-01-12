@@ -1,4 +1,4 @@
-'''
+"""
 Created on Sep 22, 2017
 
 @author: Dmitry Melnichansky 4X1MD ex 4X5DM, 4Z7DTF
@@ -7,8 +7,9 @@ Created on Sep 22, 2017
          
 @note: The script uses UT61E class which to reads data from UNI-T UT61E using
        serial interface and displays it in human readable form.
-'''
+"""
 
+from __future__ import print_function
 from src.ut61e import UT61E
 import sys
 import time
@@ -19,7 +20,7 @@ SLEEP_TIME = 0.25
 PORT = "/dev/ttyUSB0"
 
 if __name__ == '__main__':
-    print "Starting UT61E monitor..."
+    print("Starting UT61E monitor...")
     
     try:
         if len(sys.argv) > 1:
@@ -31,17 +32,17 @@ if __name__ == '__main__':
         
         while True:
             meas = dmm.get_readable(disp_norm_val=True)
-            print
-            print datetime.datetime.now()
-            print meas
+            print()
+            print(datetime.datetime.now())
+            print(meas)
     
             time.sleep(SLEEP_TIME)
             
-    except SerialException, e:
-        print "Serial port error."
-        print e
+    except SerialException as e:
+        print("Serial port error.")
+        print(e)
         
     except KeyboardInterrupt:
-        print
-        print "Extiting UT61E monitor."
+        print()
+        print("Extiting UT61E monitor.")
         sys.exit()

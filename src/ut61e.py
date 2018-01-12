@@ -1,4 +1,4 @@
-'''
+"""
 Created on Sep 22, 2017
 
 @author: Dmitry Melnichansky 4X1MD ex 4X5DM, 4Z7DTF
@@ -8,7 +8,7 @@ Created on Sep 22, 2017
 @note: UT61E class which reads data packets from UNI-T UT61E using serial
        interface, parses them and returns as dictionary or as string in
        human readable form.
-'''
+"""
 
 import serial
 
@@ -85,7 +85,7 @@ HOLD = 0b00000010
 
 
 # Measurement ranges
-'''
+"""
 Byte 6:  B         3         6         2         D         F         0        2
 Byte 0:  V, mV     Ohm       F         Hz        uA        mA        A        %
     0    2.2000    220.00    22.000n   220.00    220.00u   22.000m   10.000   100.0
@@ -96,7 +96,8 @@ Byte 0:  V, mV     Ohm       F         Hz        uA        mA        A        %
     5    -         22.000M   2.2000m   2.2000M   -         -         -        100.0
     6    -         220.00M   22.000m   22.000M   -         -         -        100.0
     7    -         -         220.00m   220.00M   -         -         -        100.0
-'''
+"""
+
 RANGE_V = (
     ('2.2000', 'V', 0.0001),
     ('22.000', 'V', 0.001),
@@ -162,7 +163,7 @@ RANGE_PERCENT = (
     )
 
 # Measurement type
-'''
+"""
 0x00   A
 0x01   Diode
 0x02   Hz, %
@@ -175,7 +176,8 @@ RANGE_PERCENT = (
 0x0D   uA
 0x0E   ADP
 0x0F   mA
-'''
+"""
+
 MEAS_TYPE = (
     ('A', RANGE_I_A),
     ('Diode', RANGE_V),
@@ -251,6 +253,7 @@ MEAS_RES = {
     'data_valid': False
     }
 
+
 class UT61E(object):
     
     def __init__(self, port):
@@ -260,7 +263,7 @@ class UT61E(object):
         self._ser.setRTS(RTS)
 
     def read_raw_data(self):
-        '''Reads a new data packet from serial port.
+        """Reads a new data packet from serial port.
         If the packet was valid returns array of integers.
         if the packet was not valid returns empty array.
         
@@ -270,47 +273,44 @@ class UT61E(object):
         If the first received packet contains less than 14 bytes, it is
         not complete and the reading is done again. Maximum number of
         retries is defined by READ_RETRIES value.
-        '''
+        """
         self._ser.reset_input_buffer()
-        
-        retries = 0
-        while retries < READ_RETRIES:
+        for x in range(READ_RETRIES):
             raw_data = self._ser.read_until(EOL, RAW_DATA_LENGTH)
             # If 14 bytes were read, the packet is valid and the loop ends.
             if len(raw_data) == RAW_DATA_LENGTH:
                 break
-            retries += 1
 
         res = []
         
         # Check data validity
         if self.is_data_valid(raw_data):
-            res = [ord(c) for c in raw_data]
+            res = [ord(c) for c in bytes(raw_data).decode()]
         
         return res
 
     def is_data_valid(self, raw_data):
-        '''Checks data validity:
+        """Checks data validity:
         1. 14 bytes long
-        2. Footer bytes 0x0D 0x0A'''
+        2. Footer bytes 0x0D 0x0A"""
         # Data length
         if len(raw_data) != RAW_DATA_LENGTH:
             return False
         
         # End bytes
-        if raw_data[12] != '\x0D' or raw_data[13] != '\x0A':
+        if not raw_data.endswith(EOL):
             return False
         
         return True
     
     def read_hex_str_data(self):
-        '''Returns raw data represented as string with hexadecimal values.'''
+        """Returns raw data represented as string with hexadecimal values."""
         data = self.read_raw_data()
         codes = ["%02X" % c for c in data]
         return " ".join(codes)
     
     def get_meas(self):
-        '''Returns received measurement as dictionary'''
+        """Returns received measurement as dictionary"""
         res = MEAS_RES.copy()
         
         raw_data = self.read_raw_data()
@@ -395,21 +395,21 @@ class UT61E(object):
         return res
     
     def normalize_val(self, val, units):
-        '''Normalizes measured value to standard units. Voltage 
+        """Normalizes measured value to standard units. Voltage 
         is normalized to Volt, current to Ampere, resistance to Ohm,
         capacitance to Farad and frequency to Herz.
-        Other units are not changed.'''
+        Other units are not changed."""
         val = val * NORM_RULES[units][0]
         units = NORM_RULES[units][1]
         return (val, units) 
 
-    def get_readable(self, disp_norm_val = False):
-        '''Prints measurement details in human readable form.
+    def get_readable(self, disp_norm_val=False):
+        """Prints measurement details in human readable form.
         disp_norm_val: if True, normalized values will also be displayed.
-        '''
+        """
         data = self.get_meas()
         
-        if data['data_valid'] == False:
+        if not data.get('data_valid', False):
             return "UT61E is not connected."
         
         res = ""
