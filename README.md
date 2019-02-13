@@ -2,6 +2,10 @@
 
 Python library for reading data from UNI-T UT61E DMM.
 
+## Update 12.2.2019. Added support to parse data you already have
+
+If you have raw data from your UT61E using Arduino or some other µP, check ut61e_parser_example.py file in src folder to see how it works.
+
 ## Overview
 
 This library was written as a weekend project. Its main goal was to learn the UNI-T UT61E data protocol.
