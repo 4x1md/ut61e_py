@@ -5,7 +5,7 @@ Created on Sep 22, 2017
          https://github.com/4x1md
          http://www.qrz.com/db/4X1MD
 
-@Changed by Bojan(https://github.com/futi16/) to allow to parse offlineData on 12.2.2019
+@Changed by @Bo-M) to allow to parse offlineData on 12.2.2019
 
 @note: The script uses UT61E class which to reads data from UNI-T UT61E using
        serial interface and displays it in human readable form.
