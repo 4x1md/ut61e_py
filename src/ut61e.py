@@ -5,7 +5,7 @@ Created on Sep 22, 2017
          https://github.com/4x1md
          http://www.qrz.com/db/4X1MD
          
-@changed by Bojan to allow to parse offlineData on 12.2.2019, so you can log with arduino(or some other µP) and that just parse
+@changed by @Bo-M to allow to parse offlineData on 12.2.2019, so you can log with arduino(or some other µP) and that just parse
 		 data
 
 @note: UT61E class which reads data packets from UNI-T UT61E using serial
