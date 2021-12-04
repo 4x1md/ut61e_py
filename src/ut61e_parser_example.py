@@ -1,8 +1,7 @@
 """
 Created on 12.2.2019
 
-@author: Bojan
-         https://github.com/futi16/
+@author: https://github.com/Bo-M/
          
 @note: The script uses UT61E class from 4x1md(https://github.com/4x1md/ut61e_py) which to parser data recorded from UNI-T UT61E 
 	   using serial interface and displays it in human readable form. If you log your data using arduino or some other µP than 
