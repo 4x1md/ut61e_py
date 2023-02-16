@@ -222,4 +222,10 @@ You are more than welcome to contact me with any questions, suggestions or propo
 2. Visit [my Facebook profile](https://www.facebook.com/Dima.Meln)
 3. Write me an email to iosaaris =at= gmail dot com
 
+## Say Thanks
+
+If you like this project, or found here some useful information and want to say thanks, or encourage me to do more, you can buy me a coffee!
+
+<a href="https://www.buymeacoffee.com/4x1md" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
 73 de 4X1MD
