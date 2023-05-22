@@ -5,6 +5,9 @@ Created on Sep 22, 2017
          https://github.com/4x1md
          http://www.qrz.com/db/4X1MD
          
+@changed by @Bo-M to allow to parse offlineData on 12.2.2019, so you can log with arduino(or some other µP) and that just parse
+		 data
+
 @note: UT61E class which reads data packets from UNI-T UT61E using serial
        interface, parses them and returns as dictionary or as string in
        human readable form.
@@ -256,11 +259,12 @@ MEAS_RES = {
 
 class UT61E(object):
     
-    def __init__(self, port):
-        self._port = port
-        self._ser = serial.Serial(self._port, BAUD_RATE, BITS, PARITY, STOP_BITS, timeout=TIMEOUT)
-        self._ser.setDTR(DTR)
-        self._ser.setRTS(RTS)
+    def __init__(self, PORT = None):
+        if PORT:
+            self._port = PORT
+            self._ser = serial.Serial(self._port, BAUD_RATE, BITS, PARITY, STOP_BITS, timeout=TIMEOUT)
+            self._ser.setDTR(DTR)
+            self._ser.setRTS(RTS)
 
     def read_raw_data(self):
         """Reads a new data packet from serial port.
@@ -309,11 +313,13 @@ class UT61E(object):
         codes = ["%02X" % c for c in data]
         return " ".join(codes)
     
-    def get_meas(self):
+    def get_meas(self, offlineData=None):
         """Returns received measurement as dictionary"""
         res = MEAS_RES.copy()
-        
-        raw_data = self.read_raw_data()
+        if offlineData:
+            raw_data = offlineData
+        else:
+            raw_data = self.read_raw_data()
         
         # If raw data is empty, return
         if len(raw_data) == 0:
@@ -403,12 +409,16 @@ class UT61E(object):
         units = NORM_RULES[units][1]
         return (val, units) 
 
-    def get_readable(self, disp_norm_val=False):
+    def get_readable(self, offlineData=None, disp_norm_val= False):
         """Prints measurement details in human readable form.
         disp_norm_val: if True, normalized values will also be displayed.
         """
-        data = self.get_meas()
-        
+        if offlineData:
+            offlineData = offlineData.encode('utf-8')
+            data = self.get_meas(offlineData=offlineData)
+        else:
+            data = self.get_meas()
+			
         if not data.get('data_valid', False):
             return "UT61E is not connected."
         
@@ -462,3 +472,4 @@ class UT61E(object):
 
 if __name__ == '__main__':
     pass
+
